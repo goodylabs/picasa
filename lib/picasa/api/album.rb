@@ -23,14 +23,15 @@ module Picasa
       #
       # @param [String] album_id album id
       # @param [Hash] options additional options included in request
+      # @param [String] imgmax size of image in media content  values are 94, 110, 128, 200, 220, 288, 320, 400, 512, 576, 640, 720, 800, 912, 1024, 1152, 1280, 1440, 1600, d(FullSizeImage)
       # @option options [String] :fields which fields should be retrieved https://developers.google.com/gdata/docs/2.0/reference#PartialResponseRequest
       # @option options [String, Integer] :max_results max number of returned results
       # @option options [String] :tag include photos with given tag only
       #
       # @return [Presenter::Album]
       # @raise [NotFoundError] raised when album cannot be found
-      def show(album_id, options = {})
-        path = "/data/feed/api/user/#{user_id}/albumid/#{album_id}"
+      def show(album_id, imgmax=600, options = {})
+        path = "/data/feed/api/user/#{user_id}/albumid/#{album_id}?imgmax=#{imgmax}"
         response = Connection.new.get(path: path, query: options, headers: auth_header)
 
         Presenter::Album.new(response.parsed_response["feed"])
